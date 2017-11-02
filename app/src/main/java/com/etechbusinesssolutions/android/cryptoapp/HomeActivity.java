@@ -285,7 +285,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                         values.put(CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE, element.getcBtcValue());
 
                         // Insert data into SQLiteDatabase
-                        Uri uri = getContentResolver().insert(CryptoContract.CurrencyEntry.CONTENT_URI, values);
+                        getContentResolver().insert(CryptoContract.CurrencyEntry.CONTENT_URI, values);
 
 
                     }
