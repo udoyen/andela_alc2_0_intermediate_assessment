@@ -19,16 +19,15 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.etechbusinesssolutions.android.cryptoapp.cryptservice.JobSchedulerService;
@@ -104,6 +103,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                 MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
                 refreshMenuItem.setVisible(true);
                 getLoaderManager().restartLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
+                getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID);
 //                if ( !getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID).isStarted()) {
 //                    refreshMenuItem.setVisible(false);
 //                }
@@ -208,40 +208,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    @Override
-    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-
-
-//
-//        SmartScheduler.JobScheduledCallback callback = new SmartScheduler.JobScheduledCallback() {
-//            @Override
-//            public void onJobScheduled(Context context, final Job job) {
-//
-//                if (job != null) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(HomeActivity.this, "Job: " + job.getJobId() + " scheduled!", Toast.LENGTH_SHORT).show();
-//                            //getLoaderManager().initLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
-//                            getLoaderManager().destroyLoader(CRYPTOCURRENCY_LOADER_ID);
-//                            getLoaderManager().initLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
-//
-//                        }
-//                    });
-//                }
-//
-//            }
-//        };
-//
-//        Job.Builder builder= new Job.Builder(JO_ID, callback, Job.Type.JOB_TYPE_PERIODIC_TASK, JOB_PERIODIC_TASK_TAG)
-//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-//                .setIntervalMillis(30000);
-//
-//        Job job = builder.build();
-//        SmartScheduler jobScheduler = SmartScheduler.getInstance(getApplicationContext());
-//        jobScheduler.addJob(job);
-        return super.onCreateView(parent, name, context, attrs);
-    }
 
 
     @Override
@@ -283,6 +249,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         //TODO: Load the information from CryptocrrencyQueryUtils into database using content provider
         Log.i(LOG_TAG, "TEST: onLoadFinished() called ...");
         Log.i(LOG_TAG, "TEST: Database data insertion started ...");
+
+        //Used to delay the API dataload icon on the Actionbar
+        final Handler handler = new Handler();
 
         // Create a ContentValues class object
         ContentValues values = new ContentValues();
@@ -330,6 +299,16 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                     Log.i(LOG_TAG, "Update format error ... " + f);
                 }
 
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Remove the API call icon in Actionbar
+                        MenuItem refreshIcon = menu.findItem(R.id.menu_refresh);
+                        refreshIcon.setVisible(false);
+                    }
+                }, 5000);
+
+
 
             } else {
 
@@ -371,6 +350,18 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
             Log.i(LOG_TAG, "Update format error ... " + f);
         }
+
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Remove the API call icon in Actionbar
+                MenuItem refreshIcon = menu.findItem(R.id.menu_refresh);
+                refreshIcon.setVisible(false);
+            }
+        }, 5000);
+
+
 
 
     }

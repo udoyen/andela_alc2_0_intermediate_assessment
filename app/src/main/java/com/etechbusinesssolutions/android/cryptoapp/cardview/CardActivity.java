@@ -352,6 +352,8 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                         Log.i(LOG_TAG, "Calling value from database in btc if block of curSpinner...Value of currency_code " + currency_code);
 
                         String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
+                        //TODO: Make this use ContentResolver
+                        //Cursor cursor = getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI, );
                         double num = Double.parseDouble(value);
                         curValue.setText(df.format(num));
                         // Top image for CardView
