@@ -9,8 +9,6 @@
     <string name="default_conversion_result_value">0</string>
     <string name="convert_btn_text">Convert</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="code_eth_text">ETH</string>
     <string name="code_btc_text">BTC</string>
     <string name="no_data">No data available!</string>

@@ -43,9 +43,6 @@ import java.util.Objects;
 
 public class ConversionActivity extends AppCompatActivity {
 
-    //TODO: Remove
-    // For logging
-    public static final String LOG_TAG = ConversionActivity.class.getSimpleName();
     private static final String MY_INTENT = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CUSTOM_INTENT";
     private static final String CONNECTION_INTENT = "android.net.conn.CONNECTIVITY_CHANGE";
     /**
@@ -104,13 +101,9 @@ public class ConversionActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            //TODO: Remove
-            Toast.makeText(context, "Intent detected", Toast.LENGTH_SHORT).show();
 
             if (intent.getAction().equals(MY_INTENT)) {
 
-                //TODO: Remove
-                Toast.makeText(context, "MY_INTENT", Toast.LENGTH_SHORT).show();
 
                 MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
                 refreshMenuItem.setVisible(true);
@@ -120,8 +113,6 @@ public class ConversionActivity extends AppCompatActivity {
             // Set the network menu status
             if (intent.getAction().equals(CONNECTION_INTENT)) {
 
-                //TODO: Remove
-                Toast.makeText(context, "CONNECT_INTENT", Toast.LENGTH_SHORT).show();
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -200,11 +191,9 @@ public class ConversionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Get the item that was selected or clicked
                 code = parent.getItemAtPosition(position).toString();
-                //TODO: Remove
-                Log.i(LOG_TAG, "Conversion Spinner selected code is: " + code);
-                //TODO: Remove
+
                 if (editBoxWithText) {
-                    Log.i(LOG_TAG, "conversion() called from Spinner object");
+
                     conversion();
                 }
 
@@ -227,10 +216,6 @@ public class ConversionActivity extends AppCompatActivity {
 
     private void loadSpinnerData() {
 
-        //TODO: Remove
-        // For logging
-        Log.i(LOG_TAG, "loadSpinnerData() called...");
-
         mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
 
         // Spinner dropdown elements
@@ -252,7 +237,7 @@ public class ConversionActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void onRadioButtonClicked(View view) {
-        Log.i(LOG_TAG, "Inside onRadioClicked() method ...");
+
 
         final TextView currencyLogo = (TextView) findViewById(R.id.conversion_currency_logo);
 
@@ -273,13 +258,10 @@ public class ConversionActivity extends AppCompatActivity {
                 //Check if user has entered some text, and
                 //whether conversion button was clicked.
                 if (editBoxWithText && conversionBtn) {
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "conversion() called from btc radio button click");
+
                     conversion();
                 }
 
-                // TODO: Remove
-                Log.i(LOG_TAG, "radioBtnState: " + radioBtnState);
                 break;
             case R.id.radio_eth:
                 if (checked)
@@ -294,12 +276,10 @@ public class ConversionActivity extends AppCompatActivity {
                 //Check if user has entered some text, and
                 //whether conversion button was clicked.
                 if (editBoxWithText && conversionBtn) {
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "conversion() called from btc radio button click");
+
                     conversion();
                 }
-                // TODO: Remove
-                Log.i(LOG_TAG, "radioBtnState: " + radioBtnState);
+
                 break;
         }
 
@@ -315,26 +295,22 @@ public class ConversionActivity extends AppCompatActivity {
         // Create a radio button object
         RadioGroup rBtn = (RadioGroup) findViewById(R.id.radio_container);
         int checked = rBtn.getCheckedRadioButtonId();
-        //TODO: Remove
-        Log.i(LOG_TAG, "Is radio button checked: " + checked);
+
 
         // Grab the user input from EditText box
         EditText value1 = (EditText) findViewById(R.id.value_to_convert_box);
-        //TODO: Remove
-        Log.i(LOG_TAG, "EditTex grabbed ...");
+
 
         // Grab the TextViews to update
         TextView resultTextView = (TextView) findViewById(R.id.conversion_value);
-        //TODO: Remove
-        Log.i(LOG_TAG, "Result textview grabbed ...");
+
 
         //Checked to make sure user input isn't empty
         if (value1.getText().toString().trim().length() > 0) {
 
             // Grab user input.
             userInput = Double.parseDouble(value1.getText().toString().trim());
-            //TODO: Remove
-            Log.i(LOG_TAG, "Converting user input to double for user in conversion ...");
+
 
         } else {
 
@@ -360,8 +336,6 @@ public class ConversionActivity extends AppCompatActivity {
 
                 // Get the value of the currency from tha database
                 double value = Double.parseDouble(mDBHelper.getCurrencyValue(code, radioBtnState));
-                //TODO: Remove
-                Log.i(LOG_TAG, "Database value: " + value);
 
 
                 // Calculate the conversion rate
@@ -370,21 +344,18 @@ public class ConversionActivity extends AppCompatActivity {
                 // Used to format the calculation output
                 result = df.format(cal);
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "Result of the conversion: " + result);
-
                 //Set the Conversion Result TextView
                 resultTextView.setText(result);
 
 
             } catch (NumberFormatException e) {
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "Calculation error: " + e);
+                //info: for debudding
+                Log.i("Error", "Calculation error: " + e);
             } catch (IllegalFormatException g) {
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "Error: " + g);
+                //info: Remove
+                Log.i("Error", "Error: " + g);
             }
 
 
@@ -398,12 +369,7 @@ public class ConversionActivity extends AppCompatActivity {
         // Signal button click has occurred
         conversionBtn = true;
 
-        // Call the conversion method
-        //TODO: Remove
-        Log.i(LOG_TAG, "onConvertBtnClick() called ...");
         conversion();
-        //TODO: Remove
-        Log.i(LOG_TAG, "conversion() called from Convert button click...");
 
 
     }
@@ -411,7 +377,7 @@ public class ConversionActivity extends AppCompatActivity {
     public boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        //TODO: Simplify this
+
         return networkInfo != null && networkInfo.isConnected();
     }
 

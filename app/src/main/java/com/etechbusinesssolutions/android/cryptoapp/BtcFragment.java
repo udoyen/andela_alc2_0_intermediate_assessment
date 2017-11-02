@@ -10,7 +10,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.ProgressBar;
 
 import com.etechbusinesssolutions.android.cryptoapp.cardview.CardActivity;
 import com.etechbusinesssolutions.android.cryptoapp.data.CryptoContract.CurrencyEntry;
-import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 
 /**
  * Created by george on 10/10/17.
@@ -29,9 +27,6 @@ import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 
 public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
-    // Used for logging
-    //TODO: Remove
-    public static final String LOG_TAG = BtcFragment.class.getName();
     /**
      * Constant value for the github loader ID. We can choose any integer
      * This really comes into play when you're using multiple loaders
@@ -39,13 +34,9 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
     private static final int DATABASE_LOADER_ID = 2;
     // String to identify intent source
     private static final String BTC_CODE = "btc_value";
-    private static final String JOB_PERIODIC_TASK_TAG = "com.etechbusinesssolutions.android.cryptoapp";
+    LoaderManager loaderManager;
     // Adapter for the list of currencies values gotten from database
     private BtcCurrencyAdapter mAdapter;
-    //TODO: Remove
-    //Create an instance of CryptoCurrencyDBHelper
-    private CryptoCurrencyDBHelper mDBHelper;
-
     /**
      * TextView that is displayed when the list is empty
      */
@@ -54,15 +45,10 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
      * Progressbar that is displayed before loader loads data
      */
     private ProgressBar progressBar;
-
     /**
      * SwipeRefreshLayout
      */
     private SwipeRefreshLayout mySwipeRefreshLayout;
-
-    LoaderManager loaderManager;
-
-
 
 
     public BtcFragment() {
@@ -106,9 +92,6 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
                 //Get the current currency that was clicked
                 int number = (int) mAdapter.getItemId(position);
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "Position of btc item clicked: " + number);
-
 
                 // Create new intent to view CardView
                 Intent cardViewIntent = new Intent(rootView.getContext(), CardActivity.class);
@@ -127,20 +110,17 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         });
 
 
-
         if (mAdapter.isEmpty()) {
 
             //****LoadManager will load information****
             // Get a reference to the loader manager in order to interact with loaders
-            //TODO: Remove
-            Log.i(LOG_TAG, "TEST: Get the LoadManager being used ...");
+
             loaderManager = getLoaderManager();
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            //TODO: Remove
-            Log.i(LOG_TAG, "TEST: Calling initloader()...");
+
             loaderManager.initLoader(DATABASE_LOADER_ID, null, this);
 
 
@@ -186,7 +166,6 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         });
 
 
-
     }
 
 
@@ -214,13 +193,10 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        //TODO: Send cursor information back to cursorAdapter
         mAdapter.swapCursor(data);
         // Stop the refreshing animation
         mySwipeRefreshLayout.setRefreshing(false);
 
-        // progressBar = (ProgressBar) findViewById(R.id.loading_spinner);
-        //TODO: Fix this.
         progressBar.setVisibility(View.GONE);
 
     }
@@ -236,8 +212,6 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
     public void userPageRefreshAction() {
 
-        //TODO: Remove
-        Log.i(LOG_TAG, "BTC Calling init LoadManager from userPageRefreshAction() ...");
 
         // Get a reference to the loader manager in order to interact with loaders
         loaderManager = getLoaderManager();
@@ -248,12 +222,6 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         loaderManager.initLoader(DATABASE_LOADER_ID, null, this);
 
     }
-
-
-
-
-
-
 
 
 }

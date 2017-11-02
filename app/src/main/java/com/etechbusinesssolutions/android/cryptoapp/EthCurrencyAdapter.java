@@ -18,10 +18,6 @@ import java.text.DecimalFormat;
  */
 
 public class EthCurrencyAdapter extends CursorAdapter {
-
-    //TODO: Remove
-    private static final String LOG_TAG = EthCurrencyAdapter.class.getSimpleName();
-
     /**
      * Format to use for displaying currencies
      */
@@ -66,7 +62,6 @@ public class EthCurrencyAdapter extends CursorAdapter {
         // Set the symbol of the currency
         // using the CurrencyHelper class static method getCurrencySymbol
         curSymbol.setText(CurrencyHelper.getCurrencySymbol(cName));
-
 
 
     }

@@ -28,7 +28,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.etechbusinesssolutions.android.cryptoapp.cryptservice.JobSchedulerService;
 import com.etechbusinesssolutions.android.cryptoapp.data.CryptoContract;
@@ -41,8 +40,6 @@ import java.util.Objects;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<List<Currency>> {
 
-    //TODO: Remove
-    public static final String LOG_TAG = HomeActivity.class.getSimpleName();
     // URL for the currency data from cryptocompare
     private static final String CRYPTO_CURRENRY_URL = "https://min-api.cryptocompare.com/data/pricemulti";
     /**
@@ -95,21 +92,15 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            //TODO: Remove
-            Toast.makeText(context, "Intent detected", Toast.LENGTH_SHORT).show();
 
             if (intent.getAction().equals(MY_INTENT)) {
 
-                //TODO: Remove
-                Toast.makeText(context, "MY_INTENT", Toast.LENGTH_SHORT).show();
+
                 receiverLoad();
             }
 
             // Set the network menu status
             if (intent.getAction().equals(CONNECTION_INTENT)) {
-
-                //TODO: Remove
-                Toast.makeText(context, "CONNECT_INTENT", Toast.LENGTH_SHORT).show();
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -140,27 +131,22 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                 .build());
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
-        Log.i(LOG_TAG, "TEST: Connectivity Manager Instance created ...");
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         //check internet connection
-        Log.i(LOG_TAG, "TEST: Internet connection checked ...");
         NetworkInfo activeNetwork = connMgr.getActiveNetworkInfo();
 
         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
 
 
             //call.run();
-            //This is where my sync code will be, but for testing purposes I only have a Log statement
-            Log.v("Sync_test", "this will run every minute");
+            //This is where my sync code will be, but for testing purposes I only have a Log statement            L
             // Get a reference to the loader manager in order to interact with loaders
-            Log.i(LOG_TAG, "TEST: Get the LoadManager being used ...");
             LoaderManager loaderManager = getLoaderManager();
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            Log.i(LOG_TAG, "TEST: Calling initloader()...");
             loaderManager.initLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
 
         }
@@ -199,7 +185,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     public boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        //TODO: Simplify this
+
         return networkInfo != null && networkInfo.isConnected();
     }
 
@@ -223,8 +209,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public Loader<List<Currency>> onCreateLoader(int id, Bundle args) {
 
-        // Create a new loader for the given URL
-        Log.i(LOG_TAG, "TEST: onCreateLoader() called ...");
 
         // Setup the baseURI
         Uri baseUri = Uri.parse(CRYPTO_CURRENRY_URL);
@@ -233,16 +217,13 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         uriBuilder.appendQueryParameter("fsyms", "ETH,BTC");
         uriBuilder.appendQueryParameter("tsyms", "USD,EUR,NGN,RUB,CAD,JPY,GBP,AUD,INR,HKD,IDR,SGD,CHF,CNY,ZAR,THB,SAR,KRW,GHS,BRL");
 
-        Log.i(LOG_TAG, "TEST: uriBuilder String" + uriBuilder.toString());
 
         return new CrytoCurrencyLoader(this, uriBuilder.toString());
     }
 
     @Override
     public void onLoadFinished(Loader<List<Currency>> loader, List<Currency> data) {
-        //TODO: Load the information from CryptocrrencyQueryUtils into database using content provider
-        Log.i(LOG_TAG, "TEST: onLoadFinished() called ...");
-        Log.i(LOG_TAG, "TEST: Database data insertion started ...");
+
 
         //Used to delay the API dataload icon on the Actionbar
         final Handler handler = new Handler();
@@ -252,11 +233,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         // Check if database table already present, if it exists
         // then update current records instead of inserting.
-        Log.i(LOG_TAG, "Checking if database is present...");
-
-
         boolean found = isTableExists();
-        Log.i(LOG_TAG, "Found: " + found + "...");
 
         try {
 
@@ -268,29 +245,23 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                         values.put(CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE, element.getcBtcValue());
 
                         // Update database
-                        int mRowsUpdated = getContentResolver().update(
+                        getContentResolver().update(
                                 CryptoContract.CurrencyEntry.CONTENT_URI,
                                 values,
                                 "_id = ?",
                                 new String[]{String.valueOf(element.getcId())}
                         );
 
-                        // Log data insertion to catch any errors
-                        // TODO: Remove
-                        Log.v("HomeActivity_db_update", "New row ID " + mRowsUpdated + " Element id " + element.getcId());
-                        Log.i("Row_Entry " + mRowsUpdated, element.getcName() + " " + element.getcEthValue() + " " + element.getcBtcValue());
 
                     }
 
 
-                    Log.i(LOG_TAG, "TEST: Database data update finished ...");
-
                 } catch (NullPointerException e) {
 
-                    Log.i(LOG_TAG, "Update error iterating over the data ... " + e);
+                    Log.i("Error", "Update error iterating over the data ... " + e);
                 } catch (IllegalFormatException f) {
 
-                    Log.i(LOG_TAG, "Update format error ... " + f);
+                    Log.i("Error", "Update format error ... " + f);
                 }
 
                 handler.postDelayed(new Runnable() {
@@ -300,7 +271,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                         refreshMenuItem = menu.findItem(R.id.menu_refresh);
                         refreshMenuItem.setVisible(false);
                     }
-                }, 5000);
+                }, 8000);
 
 
             } else {
@@ -315,22 +286,16 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
                         // Insert data into SQLiteDatabase
                         Uri uri = getContentResolver().insert(CryptoContract.CurrencyEntry.CONTENT_URI, values);
-                        // Log data insertion to catch any errors
-                        // TODO: Remove
-                        Log.v("HomeActivity", "Insert new row ID " + uri);
-                        Log.i("Row Entry ", element.getcName() + " " + element.getcEthValue() + " " + element.getcBtcValue());
+
 
                     }
 
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "TEST: Database data insertion finished ...");
-
                 } catch (NullPointerException e) {
 
-                    Log.i(LOG_TAG, "database insert error no data to iterate over ... " + e);
+                    Log.i("Error", "database insert error no data to iterate over ... " + e);
                 } catch (IllegalFormatException f) {
 
-                    Log.i(LOG_TAG, "Update format error ... " + f);
+                    Log.i("Error", "Update format error ... " + f);
                 }
 
                 handler.postDelayed(new Runnable() {
@@ -340,17 +305,17 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                         refreshMenuItem = menu.findItem(R.id.menu_refresh);
                         refreshMenuItem.setVisible(false);
                     }
-                }, 5000);
+                }, 8000);
 
 
             }
         } catch (NullPointerException g) {
 
-            Log.i(LOG_TAG, "Database existent confirmation error " + g);
+            Log.i("Error", "Database existent confirmation error " + g);
 
         } catch (IllegalFormatException f) {
 
-            Log.i(LOG_TAG, "Update format error ... " + f);
+            Log.i("Error", "Update format error ... " + f);
         }
 
 
@@ -359,8 +324,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public void onLoaderReset(Loader<List<Currency>> loader) {
 
-        //TODO: Remove
-        Log.i(LOG_TAG, "TEST: onLoadReset() called ...");
+
         getLoaderManager().destroyLoader(CRYPTOCURRENCY_LOADER_ID);
 
     }
@@ -430,7 +394,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         return true;
     }
-
 
 
     private void receiverLoad() {

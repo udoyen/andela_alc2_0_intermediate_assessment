@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 /**
  * Created by george on 10/16/17.
@@ -17,19 +16,13 @@ import android.util.Log;
 
 public class CurrencyProvider extends ContentProvider {
 
-    //TODO: Remove
-    public static final String LOG_TAG = CurrencyProvider.class.getSimpleName();
-
-    // Database helper that will provide access to the database
-    private CryptoCurrencyDBHelper mDbHelper;
 
     // URI matcher code for the content URI for currency table
     private static final int CURRENCY = 100;
-
-
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /**
+     * URI matcher code for the content URI for a single pet in the pets table
+     */
     private static final int CURRENCY_ID = 101;
-
     /**
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -43,10 +36,13 @@ public class CurrencyProvider extends ContentProvider {
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
 
-        // TODO: Add 1 content URIs to URI matcher
+
         sUriMatcher.addURI(CryptoContract.CONTENT_AUTHORITY, CryptoContract.PATH_CURRENCY, CURRENCY);
         sUriMatcher.addURI(CryptoContract.CONTENT_AUTHORITY, CryptoContract.PATH_CURRENCY + "/#", CURRENCY);
     }
+
+    // Database helper that will provide access to the database
+    private CryptoCurrencyDBHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
@@ -87,22 +83,22 @@ public class CurrencyProvider extends ContentProvider {
                 // argument that will fill in the "?". Since we have 1 question mark in the
                 // selection we have 1 String in the selection arguments' String array.
                 selection = CryptoContract.CurrencyEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(CryptoContract.CurrencyEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
-                default:
-                    throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
 
         }
 
         // Set notification URI on the Cursor,
         // so we know what content URI the cursor was created for.
         // If the data at this URI changes, then we need to update the Cursor.
-        //TODO: Fix this to watch for null situation
+
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -141,7 +137,7 @@ public class CurrencyProvider extends ContentProvider {
         long id = database.insert(CryptoContract.CurrencyEntry.TABLE_NAME, null, values);
         // If the ID is -1, then insertion failed. Log an error and return null.
         if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+
             return null;
         }
 
@@ -168,7 +164,7 @@ public class CurrencyProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = CryptoContract.CurrencyEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateCurrency(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);

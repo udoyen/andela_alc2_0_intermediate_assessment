@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
-import android.widget.Toast;
 
 /**
  * Created by george on 10/29/17.
@@ -16,16 +15,12 @@ import android.widget.Toast;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobSchedulerService extends JobService {
 
-    //TODO: Remove
-    public static final String LOG_TAG = JobSchedulerService.class.getSimpleName();
+
     private static final String MY_INTENT = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CUSTOM_INTENT";
     private Handler mJobHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            //TODO: Remove
-            Toast.makeText(getApplicationContext(),
-                    "JobService task running", Toast.LENGTH_SHORT)
-                    .show();
+
             broadcastIntent();
             jobFinished((JobParameters) msg.obj, false);
             return true;

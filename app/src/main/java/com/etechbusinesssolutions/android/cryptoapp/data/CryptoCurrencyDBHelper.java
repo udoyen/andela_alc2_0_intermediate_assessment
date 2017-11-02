@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +14,6 @@ import java.util.List;
 
 public class CryptoCurrencyDBHelper extends SQLiteOpenHelper {
 
-    // Used for loggin
-    //TODO: Remove
-    public static final String LOG_TAG = CryptoCurrencyDBHelper.class.getSimpleName();
 
     // Name of database
     private static final String DATABASE_NAME = "currency.db";
@@ -46,7 +42,6 @@ public class CryptoCurrencyDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.i(LOG_TAG, "TEST: CrytoCurrencyDBHelper onCreate() called ...");
 
         // Create a String that contains the SQl statement to create the pets table
         String SQL_CREATE_CURRENCY_TABLE = "CREATE TABLE " + CryptoContract.CurrencyEntry.TABLE_NAME + " ("
@@ -118,7 +113,6 @@ public class CryptoCurrencyDBHelper extends SQLiteOpenHelper {
      */
     public String getCurrencyValue(String cur_name, String crypt_version) {
 
-        Log.i(LOG_TAG, "getCurrencyValue() called ...");
 
         // Select value query
         String selectValueQuery = "SELECT " + crypt_version + " FROM "

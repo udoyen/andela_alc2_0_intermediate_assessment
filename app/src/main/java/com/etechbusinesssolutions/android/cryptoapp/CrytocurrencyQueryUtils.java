@@ -22,18 +22,11 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.etechbusinesssolutions.android.cryptoapp.BtcFragment.LOG_TAG;
-
 /**
  * Created by george on 10/10/17.
  */
 
 public class CrytocurrencyQueryUtils {
-
-    /**
-     * Format to use for displayed currencies
-     */
-    DecimalFormat df = new DecimalFormat("#,###.###");
 
     // Array for names of currencies
     private static String[] majorCur = {
@@ -58,7 +51,6 @@ public class CrytocurrencyQueryUtils {
             "GHS",
             "BRL"
     };
-
     // int array used to access the update database
     private static int[] virtualId = {
 
@@ -83,7 +75,10 @@ public class CrytocurrencyQueryUtils {
             19,
             20
     };
-
+    /**
+     * Format to use for displayed currencies
+     */
+    DecimalFormat df = new DecimalFormat("#,###.###");
 
 
     /**
@@ -97,7 +92,7 @@ public class CrytocurrencyQueryUtils {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private  static List<Currency> extractFeatureFromJson (String cryptoJSON) {
+    private static List<Currency> extractFeatureFromJson(String cryptoJSON) {
 
         // if the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(cryptoJSON)) {
@@ -121,10 +116,9 @@ public class CrytocurrencyQueryUtils {
 
             // Iterate over the returned object and get the keys and values
             // and add that to the List
-            for ( int i = 0; i < eth.length(); i++) {
+            for (int i = 0; i < eth.length(); i++) {
 
-                //TODO: Tidy
-                //String ethCurrency = eth.keys().next();
+
                 double ethValue = eth.getDouble(majorCur[i]);
 
                 //BigDecimal ethValue = BigDecimal.valueOf(eth.getDouble(majorCur[i]));
@@ -164,7 +158,7 @@ public class CrytocurrencyQueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Problem building the URL ", e);
+            Log.e("Error", "Problem building the URL ", e);
         }
         return url;
     }
@@ -196,11 +190,11 @@ public class CrytocurrencyQueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                Log.e("Error", "Error response code: " + urlConnection.getResponseCode());
             }
 
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e("Error", "Problem retrieving the earthquake JSON results.", e);
 
         } finally {
             if (urlConnection != null) {
@@ -238,9 +232,8 @@ public class CrytocurrencyQueryUtils {
 
 
     @TargetApi(Build.VERSION_CODES.N)
-    public static List<Currency> fetchCurrencyData (String requestUrl) {
+    public static List<Currency> fetchCurrencyData(String requestUrl) {
 
-        Log.i(LOG_TAG, "TEST: fetchCurrencyData() called ...");
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -248,9 +241,9 @@ public class CrytocurrencyQueryUtils {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpsRequest(url);
-            Log.i(LOG_TAG, "TEST: Url used to request data " + url);
+
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+            Log.e("Error", "Problem making the HTTP request.", e);
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Currency}
@@ -260,7 +253,6 @@ public class CrytocurrencyQueryUtils {
         // Return the list of {@link Github}
         return currency;
     }
-
 
 
 }

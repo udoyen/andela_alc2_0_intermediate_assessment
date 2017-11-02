@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.etechbusinesssolutions.android.cryptoapp.R;
 import com.etechbusinesssolutions.android.cryptoapp.conversion.ConversionActivity;
@@ -42,9 +40,7 @@ import java.util.Objects;
 
 public class CardActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    //TODO: Remove
-    // For logging
-    public static final String LOG_TAG = CardActivity.class.getSimpleName();
+
     // String to identify intent source
     private static final String ETH_CODE = "eth_value";
     private static final String BTC_CODE = "btc_value";
@@ -110,14 +106,9 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            //TODO: Remove
-            Toast.makeText(context, "Intent detected", Toast.LENGTH_SHORT).show();
 
             // Set the network menu status
             if (intent.getAction().equals(CONNECTION_INTENT)) {
-
-                //TODO: Remove
-                Toast.makeText(context, "CONNECT_INTENT", Toast.LENGTH_SHORT).show();
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -164,7 +155,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Make sure extra actually captures something from main
         if (extras == null) {
-            Log.i(LOG_TAG, "Extras was null ...");
+
             return;
         }
 
@@ -180,9 +171,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         loadSpinnerData();
         // Load the crypto spinner
         loadCryptoSpinner();
-
-        //TODO: Remove
-        Log.i(LOG_TAG, "Column Position id sent here: " + columnPosition);
 
 
         // Spinner listener
@@ -200,9 +188,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 // Get the item that was selected or clicked
                 String code = parent.getItemAtPosition(position).toString();
-                //TODO: Remove
-                Log.i(LOG_TAG, "Spinner selected code is: " + code);
-                Log.i(LOG_TAG, "currency_code is: " + currency_code + " and code is " + code);
 
 
                 mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
@@ -216,16 +201,12 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 if (currency_code != null) {
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "Inside currency_code if block ...");
 
 
                     if (currency_code.equals(ETH_CODE)) {
 
                         double ethValue = 0;
 
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Calling value from database in eth if block spinner...");
 
                         //String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
                         String[] projection = {
@@ -242,8 +223,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                         if (cursor.moveToFirst()) {
                             ethValue = cursor.getDouble(currencyValueIndex);
                         }
-                        //TODO: Remove
-                        //double num = Double.parseDouble(value);
+
                         curValue.setText(df.format(ethValue));
                         logoText.setText(CurrencyHelper.getCurrencySymbol(code));
                         // Top image for CardView
@@ -255,13 +235,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                         double btcValue = 0;
 
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Calling value from database in btc if block spinner...");
-
-                        // TODO: Remove
-                        //String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
-                        //TODO: Remove
-                        //double num = Double.parseDouble(value);
                         String[] projection = {
                                 CryptoContract.CurrencyEntry._ID,
                                 CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE
@@ -307,27 +280,22 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                 // Get the spinner item that is currently selected
                 String code = spinner.getSelectedItem().toString();
                 String cryptSelected = parent.getItemAtPosition(position).toString();
-                //TODO: Remove
-                Log.i(LOG_TAG, "code value in curSpinner: " + code);
+
 
                 mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
-                //TODO: Remove
-                Log.i(LOG_TAG, "cryptoCurSpinnerChecker() called and the value: " + curSpinnerClicked);
+
 
                 if (!curSpinnerClicked) {
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "Setting the displayed cryptoCurSpinner ...");
+
 
                     if (currency_code != null) {
                         if (currency_code.equals(ETH_CODE)) {
-                            //TODO: Remove
-                            Log.i(LOG_TAG, "Setting the displayed cryptoCurSpinner to ETH...");
+
                             curSpinner.setSelection(0);
 
                         }
                         if (currency_code.equals(BTC_CODE)) {
-                            //TODO: Remove
-                            Log.i(LOG_TAG, "Setting the displayed cryptoCurSpinner to BTC...");
+
                             curSpinner.setSelection(1);
 
                         }
@@ -343,35 +311,24 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (currency_code != null) {
 
                     if (cryptSelected.equals(getString(R.string.code_eth_text))) {
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Setting eth_ value currency_code to " + cryptSelected);
+
                         currency_code = "eth_value";
                     }
 
                     if (cryptSelected.equals(getString(R.string.code_btc_text))) {
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Setting btc_ value currency_code to " + cryptSelected);
+
                         currency_code = "btc_value";
                     }
                 }
 
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "cryptoCurSpinnerChecker() called and the value: " + curSpinnerClicked);
-
-
                 if (currency_code != null) {
-                    //TODO: Remove
-                    Log.i(LOG_TAG, "Inside currency_code if block of curSpinner... Value of currency_code " + currency_code + "cryptSelected: " + cryptSelected);
 
                     if (currency_code.equals(ETH_CODE)) {
 
                         double ethValue = 0;
 
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Calling value from database in eth if block of curSpinner...Value of currency_code " + currency_code);
-                        //TODO: Remove
-                        //String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
+
                         String[] projection = {
                                 CryptoContract.CurrencyEntry._ID,
                                 CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE
@@ -386,8 +343,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                         if (cursor.moveToFirst()) {
                             ethValue = cursor.getDouble(currencyValueIndex);
                         }
-                        //TODO: Remove
-                        //double num = Double.parseDouble(value);
+
                         curValue.setText(df.format(ethValue));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.ethereum);
@@ -398,11 +354,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                         double btcValue = 0;
 
-                        //TODO: Remove
-                        Log.i(LOG_TAG, "Calling value from database in btc if block of curSpinner...Value of currency_code " + currency_code);
-                        //TODO: Remove
-                        //String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
-                        //TODO: Make this use ContentResolver
                         String[] projection = {
                                 CryptoContract.CurrencyEntry._ID,
                                 CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE
@@ -417,8 +368,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                         if (cursor.moveToFirst()) {
                             btcValue = cursor.getDouble(currencyValueIndex);
                         }
-                        //TODO: Remove
-                        //double num = Double.parseDouble(value);
+
                         curValue.setText(df.format(btcValue));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.bitcoin);
@@ -442,9 +392,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Remove
-                Log.i(LOG_TAG, "CardView onCLick event fired ...");
-                Toast.makeText(CardActivity.this, "Clicked on CardView", Toast.LENGTH_LONG).show();
 
                 Intent customConversionRate = new Intent(getApplicationContext(), ConversionActivity.class);
                 startActivity(customConversionRate);
@@ -459,9 +406,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     private void loadSpinnerData() {
 
-        //TODO: Remove
-        // For logging
-        Log.i(LOG_TAG, "loadSpinnerData() called...");
 
         mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
 
@@ -484,9 +428,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void loadCryptoSpinner() {
 
-        //TODO: Remove
-        // For logging
-        Log.i(LOG_TAG, "loadCryptoSpinner() called ...");
 
         // Create an adapter from the string array resource and use
         // android's inbuilt layout file simple_spinner_item
@@ -509,8 +450,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
-        // TODO: What should happen when nothing is selected?
 
     }
 
@@ -545,7 +484,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        //TODO: Simplify this
+
         return networkInfo != null && networkInfo.isConnected();
     }
 

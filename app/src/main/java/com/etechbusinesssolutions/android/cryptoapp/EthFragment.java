@@ -1,9 +1,7 @@
 package com.etechbusinesssolutions.android.cryptoapp;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +27,7 @@ import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 
 public class EthFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // Used for logging
-    //TODO: Remove
-    public static final String LOG_TAG = EthFragment.class.getName();
+
     /**
      * Constant value for the github loader ID. We can choose any integer
      * This really comes into play when you're using multiple loaders
@@ -40,21 +35,19 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
     private static final int DATABASE_LOADER_ID = 3;
 
     /**
-     *  String to identify intent source
+     * String to identify intent source
      */
     private static final String ETH_CODE = "eth_value";
+    LoaderManager loaderManager;
 
     /**
      * Adapter for the list of currencies values gotten from database
      */
     private EthCurrencyAdapter mAdapter;
-
-    //TODO: Remove
     /**
      * Create an instance of CryptoCurrencyDBHelper
      */
     private CryptoCurrencyDBHelper mDBHelper;
-
     /**
      * TextView that is displayed when the list is empty
      */
@@ -63,13 +56,10 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
      * Progressbar that is displayed before loader loads data
      */
     private ProgressBar progressBar;
-
     /**
      * SwipeRefreshLayout
      */
     private SwipeRefreshLayout mySwipeRefreshLayout;
-
-    LoaderManager loaderManager;
 
 
     public EthFragment() {
@@ -114,10 +104,6 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
                 //Get the current currency that was clicked
                 int number = (int) mAdapter.getItemId(position);
 
-                //TODO: Remove
-                Log.i(LOG_TAG, "Position of eth item clicked: " + number);
-
-
                 // Create new intent to view CardView
                 Intent cardViewIntent = new Intent(rootView.getContext(), CardActivity.class);
 
@@ -138,15 +124,13 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
             //****LoadManager will load information****
             // Get a reference to the loader manager in order to interact with loaders
-            //TODO: Remove
-            Log.i(LOG_TAG, "TEST: Get the LoadManager being used ...");
+
             loaderManager = getLoaderManager();
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            //TODO: Remove
-            Log.i(LOG_TAG, "TEST: Calling initloader()...");
+
             loaderManager.initLoader(DATABASE_LOADER_ID, null, this);
 
 
@@ -189,8 +173,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //TODO: Remove
-                Log.i(LOG_TAG, "eth onRefresh() called ...");
+
                 userPageRefreshAction();
                 //onCreateLoader(1, getArguments());
             }
@@ -199,8 +182,6 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //TODO: Remove
-        Log.i(LOG_TAG, "eth onCreateLoader() called...");
 
         // Define a projection that specifies which columns from the
         // database that will be used after this query
@@ -221,17 +202,12 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //TODO: Remove
-        Log.i(LOG_TAG, "eth onLoadFinished() called ...");
 
-        //TODO: Send cursor information back to cursorAdapter
         mAdapter.swapCursor(data);
 
         // Stop the refreshing animation
         mySwipeRefreshLayout.setRefreshing(false);
 
-        // progressBar = (ProgressBar) findViewById(R.id.loading_spinner);
-        //TODO: Fix this.
         progressBar.setVisibility(View.GONE);
 
     }
@@ -247,8 +223,6 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     public void userPageRefreshAction() {
 
-        //TODO: Remove
-        Log.i(LOG_TAG, "eth Calling init LoadManager from userPageRefreshAction() ...");
 
         // Get a reference to the loader manager in order to interact with loaders
         loaderManager = getLoaderManager();
@@ -261,26 +235,4 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
     }
 
 
-
-    //TODO: Remove this if it does nothing
-    @TargetApi(Build.VERSION_CODES.O)
-    private void getDataInfo() {
-
-        String[] projection = {
-                CryptoContract.CurrencyEntry._ID,
-                CryptoContract.CurrencyEntry.COLUMN_CURRENCY_NAME,
-                CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE
-        };
-
-
-        Cursor cursor = getContext().getContentResolver().query(
-                CryptoContract.CurrencyEntry.CONTENT_URI,
-                projection,
-                null,
-                null);
-
-
-
-
-    }
 }

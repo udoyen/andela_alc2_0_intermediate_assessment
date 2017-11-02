@@ -24,9 +24,6 @@ public class BtcCurrencyAdapter extends CursorAdapter {
      */
     private DecimalFormat df = new DecimalFormat("#,###.###");
 
-    //TODO: Remove
-    private static final String LOG_TAG = BtcCurrencyAdapter.class.getSimpleName();
-
 
     public BtcCurrencyAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
@@ -66,7 +63,6 @@ public class BtcCurrencyAdapter extends CursorAdapter {
         // Set the symbol of the currency
         // using the CurrencyHelper class static method getCurrencySymbol
         curSymbol.setText(CurrencyHelper.getCurrencySymbol(cName));
-
 
 
     }
