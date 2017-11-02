@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.etechbusinesssolutions.android.cryptoapp.R;
 import com.etechbusinesssolutions.android.cryptoapp.conversion.ConversionActivity;
 import com.etechbusinesssolutions.android.cryptoapp.cryptservice.JobSchedulerService;
+import com.etechbusinesssolutions.android.cryptoapp.data.CryptoContract;
 import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 import com.etechbusinesssolutions.android.cryptoapp.data.CurrencyHelper;
 import com.etechbusinesssolutions.android.cryptoapp.networkutil.NetworkUtil;
@@ -93,6 +95,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      * Used to check network status
      */
     boolean online;
+
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -109,19 +112,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
             //TODO: Remove
             Toast.makeText(context, "Intent detected", Toast.LENGTH_SHORT).show();
-
-            if (intent.getAction().equals(MY_INTENT)) {
-
-                //TODO: Remove
-                Toast.makeText(context, "MY_INTENT", Toast.LENGTH_SHORT).show();
-
-                MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
-                refreshMenuItem.setVisible(true);
-//                if ( !getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID).isStarted()) {
-//                    refreshMenuItem.setVisible(false);
-//                }
-
-            }
 
             // Set the network menu status
             if (intent.getAction().equals(CONNECTION_INTENT)) {
@@ -148,6 +138,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      * was drawn for the first time
      */
     private boolean curSpinnerClicked = false;
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -228,30 +219,68 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                     //TODO: Remove
                     Log.i(LOG_TAG, "Inside currency_code if block ...");
 
+
                     if (currency_code.equals(ETH_CODE)) {
+
+                        double ethValue = 0;
 
                         //TODO: Remove
                         Log.i(LOG_TAG, "Calling value from database in eth if block spinner...");
 
-                        String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
-                        double num = Double.parseDouble(value);
-                        curValue.setText(df.format(num));
+                        //String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
+                        String[] projection = {
+                                CryptoContract.CurrencyEntry._ID,
+                                CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE
+                        };
+                        Cursor cursor = getApplicationContext().getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI,
+                                projection,
+                                "cur_name = ?",
+                                new String[]{code},
+                                null);
+                        assert cursor != null;
+                        int currencyValueIndex = cursor.getColumnIndex(CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE);
+                        if (cursor.moveToFirst()) {
+                            ethValue = cursor.getDouble(currencyValueIndex);
+                        }
+                        //TODO: Remove
+                        //double num = Double.parseDouble(value);
+                        curValue.setText(df.format(ethValue));
                         logoText.setText(CurrencyHelper.getCurrencySymbol(code));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.ethereum);
+                        cursor.close();
 
                     }
                     if (currency_code.equals(BTC_CODE)) {
 
+                        double btcValue = 0;
+
                         //TODO: Remove
                         Log.i(LOG_TAG, "Calling value from database in btc if block spinner...");
 
-                        String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
-                        double num = Double.parseDouble(value);
-                        curValue.setText(df.format(num));
+                        // TODO: Remove
+                        //String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
+                        //TODO: Remove
+                        //double num = Double.parseDouble(value);
+                        String[] projection = {
+                                CryptoContract.CurrencyEntry._ID,
+                                CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE
+                        };
+                        Cursor cursor = getApplicationContext().getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI,
+                                projection,
+                                "cur_name = ?",
+                                new String[]{code},
+                                null);
+                        assert cursor != null;
+                        int currencyValueIndex = cursor.getColumnIndex(CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE);
+                        if (cursor.moveToFirst()) {
+                            btcValue = cursor.getDouble(currencyValueIndex);
+                        }
+                        curValue.setText(df.format(btcValue));
                         logoText.setText(CurrencyHelper.getCurrencySymbol(code));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.bitcoin);
+                        cursor.close();
 
                     }
                 }
@@ -264,6 +293,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         curSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @TargetApi(Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Get the Card currency value
@@ -336,28 +366,63 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     if (currency_code.equals(ETH_CODE)) {
 
+                        double ethValue = 0;
+
                         //TODO: Remove
                         Log.i(LOG_TAG, "Calling value from database in eth if block of curSpinner...Value of currency_code " + currency_code);
-
-                        String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
-                        double num = Double.parseDouble(value);
-                        curValue.setText(df.format(num));
+                        //TODO: Remove
+                        //String value = mDBHelper.getCurrencyValue(code, ETH_CODE);
+                        String[] projection = {
+                                CryptoContract.CurrencyEntry._ID,
+                                CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE
+                        };
+                        Cursor cursor = getApplicationContext().getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI,
+                                projection,
+                                "cur_name = ?",
+                                new String[]{code},
+                                null);
+                        assert cursor != null;
+                        int currencyValueIndex = cursor.getColumnIndex(CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE);
+                        if (cursor.moveToFirst()) {
+                            ethValue = cursor.getDouble(currencyValueIndex);
+                        }
+                        //TODO: Remove
+                        //double num = Double.parseDouble(value);
+                        curValue.setText(df.format(ethValue));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.ethereum);
+                        cursor.close();
 
                     }
                     if (currency_code.equals(BTC_CODE)) {
 
+                        double btcValue = 0;
+
                         //TODO: Remove
                         Log.i(LOG_TAG, "Calling value from database in btc if block of curSpinner...Value of currency_code " + currency_code);
-
-                        String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
+                        //TODO: Remove
+                        //String value = mDBHelper.getCurrencyValue(code, BTC_CODE);
                         //TODO: Make this use ContentResolver
-                        //Cursor cursor = getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI, );
-                        double num = Double.parseDouble(value);
-                        curValue.setText(df.format(num));
+                        String[] projection = {
+                                CryptoContract.CurrencyEntry._ID,
+                                CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE
+                        };
+                        Cursor cursor = getApplicationContext().getContentResolver().query(CryptoContract.CurrencyEntry.CONTENT_URI,
+                                projection,
+                                "cur_name = ?",
+                                new String[]{code},
+                                null);
+                        assert cursor != null;
+                        int currencyValueIndex = cursor.getColumnIndex(CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE);
+                        if (cursor.moveToFirst()) {
+                            btcValue = cursor.getDouble(currencyValueIndex);
+                        }
+                        //TODO: Remove
+                        //double num = Double.parseDouble(value);
+                        curValue.setText(df.format(btcValue));
                         // Top image for CardView
                         cryptImage.setImageResource(R.drawable.bitcoin);
+                        cursor.close();
 
                     }
                 }
@@ -490,6 +555,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         //inflate the menu options from the menu xml file
         //This add menu items to the app bar
         getMenuInflater().inflate(R.menu.network_available, menu);
+        this.menu = menu;
 
         if (isConnected()) {
             // Let user know the status of the device network

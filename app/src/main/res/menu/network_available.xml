@@ -6,13 +6,14 @@
 
     <item
         android:id="@+id/menu_refresh"
-        android:icon="@drawable/progress"
+        android:icon="@drawable/api"
         android:title="data Refresh"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_network_available"
+        android:icon="@drawable/connected"
         android:title="@string/network_avalable"
         android:visible="false"
         app:showAsAction="always" />
@@ -20,6 +21,7 @@
 
     <item
         android:id="@+id/menu_network_absent"
+        android:icon="@drawable/disconnected"
         android:title="@string/network_absent"
         android:visible="true"
         app:showAsAction="ifRoom" />

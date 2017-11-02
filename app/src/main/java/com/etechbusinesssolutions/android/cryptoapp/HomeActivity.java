@@ -79,6 +79,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
      */
     boolean online;
 
+    MenuItem refreshMenuItem;
+
+
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -99,15 +102,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
                 //TODO: Remove
                 Toast.makeText(context, "MY_INTENT", Toast.LENGTH_SHORT).show();
-
-                MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
-                refreshMenuItem.setVisible(true);
-                getLoaderManager().restartLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
-                getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID);
-//                if ( !getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID).isStarted()) {
-//                    refreshMenuItem.setVisible(false);
-//                }
-
+                receiverLoad();
             }
 
             // Set the network menu status
@@ -209,7 +204,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -303,11 +297,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                     @Override
                     public void run() {
                         //Remove the API call icon in Actionbar
-                        MenuItem refreshIcon = menu.findItem(R.id.menu_refresh);
-                        refreshIcon.setVisible(false);
+                        refreshMenuItem = menu.findItem(R.id.menu_refresh);
+                        refreshMenuItem.setVisible(false);
                     }
                 }, 5000);
-
 
 
             } else {
@@ -340,6 +333,15 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
                     Log.i(LOG_TAG, "Update format error ... " + f);
                 }
 
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Remove the API call icon in Actionbar
+                        refreshMenuItem = menu.findItem(R.id.menu_refresh);
+                        refreshMenuItem.setVisible(false);
+                    }
+                }, 5000);
+
 
             }
         } catch (NullPointerException g) {
@@ -350,18 +352,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
             Log.i(LOG_TAG, "Update format error ... " + f);
         }
-
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Remove the API call icon in Actionbar
-                MenuItem refreshIcon = menu.findItem(R.id.menu_refresh);
-                refreshIcon.setVisible(false);
-            }
-        }, 5000);
-
-
 
 
     }
@@ -441,16 +431,16 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         return true;
     }
 
-    //    public static class MyReceiver extends BroadcastReceiver {
-//
-//        private static final String MY_RECEIVER = "com.etechbusinesssolutions.android.cryptoapp";
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            Toast.makeText(context, "Intent detected", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
+
+
+    private void receiverLoad() {
+
+        refreshMenuItem = menu.findItem(R.id.menu_refresh);
+        refreshMenuItem.setVisible(true);
+        getLoaderManager().restartLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
+        getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID);
+
+    }
 
 
 }
