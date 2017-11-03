@@ -93,14 +93,14 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         public void onReceive(Context context, Intent intent) {
 
 
-            if (intent.getAction().equals(MY_INTENT)) {
+            if (Objects.equals(intent.getAction(), MY_INTENT)) {
 
 
                 receiverLoad();
             }
 
             // Set the network menu status
-            if (intent.getAction().equals(CONNECTION_INTENT)) {
+            if (Objects.equals(intent.getAction(), CONNECTION_INTENT)) {
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -127,13 +127,14 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         mJobScheduler.schedule(new JobInfo.Builder(JOB_ID,
                 new ComponentName(this, JobSchedulerService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPeriodic(60000)
+                .setPeriodic(30000)
                 .build());
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         //check internet connection
+        assert connMgr != null;
         NetworkInfo activeNetwork = connMgr.getActiveNetworkInfo();
 
         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
@@ -172,18 +173,12 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         assert tabLayout != null;
         tabLayout.setupWithViewPager(viewPager);
 
-        // Used with dynamically registered Broadcast receiver
-        // when using an inner Braodcast class that must be static
-
-//        IntentFilter filter = new IntentFilter(MyReceiver.MY_RECEIVER);
-//        BroadcastReceiver receiver = new MyReceiver();
-//        registerReceiver(receiver, filter);
-
 
     }
 
     public boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         return networkInfo != null && networkInfo.isConnected();
