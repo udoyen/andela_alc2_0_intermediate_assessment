@@ -44,8 +44,8 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
     // String to identify intent source
     private static final String ETH_CODE = "eth_value";
     private static final String BTC_CODE = "btc_value";
-    private static final String MY_INTENT = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CUSTOM_INTENT";
     private static final String CONNECTION_INTENT = "android.net.conn.CONNECTIVITY_CHANGE";
+
     /**
      * JobScheduler Job ID
      */
@@ -92,6 +92,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     boolean online;
 
+
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -106,9 +107,8 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         @Override
         public void onReceive(Context context, Intent intent) {
 
-
             // Set the network menu status
-            if (intent.getAction().equals(CONNECTION_INTENT)) {
+            if (Objects.equals(intent.getAction(), CONNECTION_INTENT)) {
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -139,7 +139,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Register the intent here
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MY_INTENT);
         intentFilter.addAction(CONNECTION_INTENT);
         registerReceiver(this.broadcastReceiver, intentFilter);
 
@@ -148,7 +147,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         mJobScheduler.schedule(new JobInfo.Builder(JOB_ID,
                 new ComponentName(this, JobSchedulerService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPeriodic(60000)
+                .setPeriodic(30000)
                 .build());
 
         Bundle extras = getIntent().getExtras();
@@ -523,7 +522,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(broadcastReceiver, new IntentFilter(MY_INTENT));
         registerReceiver(broadcastReceiver, new IntentFilter(CONNECTION_INTENT));
 
     }
@@ -534,4 +532,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onPause();
         unregisterReceiver(broadcastReceiver);
     }
+
+
 }

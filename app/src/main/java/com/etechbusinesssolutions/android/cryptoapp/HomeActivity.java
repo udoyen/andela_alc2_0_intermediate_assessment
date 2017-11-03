@@ -56,8 +56,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     private static final String MY_INTENT = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CUSTOM_INTENT";
     private static final String CONNECTION_INTENT = "android.net.conn.CONNECTIVITY_CHANGE";
-    private static final String CARDVIEW_START_NOTICE = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CARDVIEW_START_INTENT";
-    private static final String CARDVIEW_STOP_NOTICE = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CARDVIEW_STOP_INTENT";
 
     /**
      * Create an instance of the JobScheduler class
@@ -78,6 +76,11 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
      */
     boolean online;
 
+    /**
+     * Used to change the
+     * display state of the
+     * data loading icon.
+     */
     MenuItem refreshMenuItem;
 
 
@@ -193,6 +196,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
         registerReceiver(broadcastReceiver, new IntentFilter(MY_INTENT));
         registerReceiver(broadcastReceiver, new IntentFilter(CONNECTION_INTENT));
 
+
     }
 
     @Override
@@ -202,35 +206,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     }
 
-    /**
-     * Used to tell CardView of the HomeActivity
-     * LoaderManager process so its UI can be
-     * updated.
-     */
-    public void broadcastStartIntent() {
-        Intent intent = new Intent(String.valueOf(this));
-        intent.setAction(CARDVIEW_START_NOTICE);
-        getApplicationContext().sendBroadcast(intent);
-    }
-
-    /**
-     * Used to tell CardView of the HomeActivity
-     * LoaderManager process so its UI can be
-     * updated.
-     */
-    public void broadcastStopIntent() {
-        Intent intent = new Intent(String.valueOf(this));
-        intent.setAction(CARDVIEW_STOP_NOTICE);
-        getApplicationContext().sendBroadcast(intent);
-    }
-
-
-
-
-
     @Override
     public Loader<List<Currency>> onCreateLoader(int id, Bundle args) {
-
 
         // Setup the baseURI
         Uri baseUri = Uri.parse(CRYPTO_CURRENRY_URL);
@@ -418,6 +395,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
 
+    /**
+     * Used to display the data loading
+     * icon.
+     */
     private void receiverLoad() {
 
         refreshMenuItem = menu.findItem(R.id.menu_refresh);
