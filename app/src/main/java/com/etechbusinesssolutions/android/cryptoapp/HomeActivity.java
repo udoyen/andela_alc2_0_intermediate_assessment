@@ -119,7 +119,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.splashScreenTheme);
+        setTheme(R.style.AppTheme);
+        //setContentView(R.layout.activity_home);
         super.onCreate(savedInstanceState);
 
         // Register the intent here
@@ -404,8 +405,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         refreshMenuItem = menu.findItem(R.id.menu_refresh);
         refreshMenuItem.setVisible(true);
-        getLoaderManager().restartLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
         getLoaderManager().getLoader(CRYPTOCURRENCY_LOADER_ID);
+        getLoaderManager().restartLoader(CRYPTOCURRENCY_LOADER_ID, null, HomeActivity.this);
+
 
     }
 

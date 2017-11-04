@@ -169,7 +169,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
         mySwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
         // Set the color of the swiperefresh animation
-        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorSecondaryDark);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondaryDark);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -225,12 +225,12 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
 
         // Get a reference to the loader manager in order to interact with loaders
-        loaderManager = getLoaderManager();
-
         // Initialize the loader. Pass in the int ID constant defined above and pass in null for
         // bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
-        loaderManager.initLoader(DATABASE_LOADER_ID, null, this);
+        getLoaderManager().getLoader(DATABASE_LOADER_ID);
+        getLoaderManager().restartLoader(DATABASE_LOADER_ID, null, EthFragment.this);
+
 
     }
 

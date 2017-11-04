@@ -156,7 +156,7 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         super.onViewCreated(view, savedInstanceState);
 
         mySwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
-        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorSecondaryDark);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondaryDark);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -214,12 +214,11 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
 
         // Get a reference to the loader manager in order to interact with loaders
-        loaderManager = getLoaderManager();
-
         // Initialize the loader. Pass in the int ID constant defined above and pass in null for
         // bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
-        loaderManager.initLoader(DATABASE_LOADER_ID, null, this);
+        getLoaderManager().getLoader(DATABASE_LOADER_ID);
+        getLoaderManager().restartLoader(DATABASE_LOADER_ID, null, BtcFragment.this);
 
     }
 

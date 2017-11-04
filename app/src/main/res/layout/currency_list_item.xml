@@ -2,34 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="@color/base_background"
     android:orientation="horizontal"
     android:paddingEnd="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingStart="16dp"
-    android:background="@color/base_background"
-
-    >
+    android:paddingStart="16dp">
 
     <TextView
         android:id="@+id/currency_symbol"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/circular_currency_background"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="@string/currency_logo"
         android:maxLines="2"
-        android:background="@drawable/circular_currency_background"
-        android:textSize="20sp"
-        android:layout_marginRight="10dp"/>
+        android:text="@string/currency_logo"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/rate"
         android:layout_width="0dp"
-        android:layout_weight="3"
         android:layout_height="36dp"
         android:layout_gravity="center_vertical"
+        android:layout_weight="3"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_vertical"
         android:maxLines="2"
@@ -40,15 +38,14 @@
     <TextView
         android:id="@+id/currency_code"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="36dp"
         android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:maxLines="2"
         android:text="@string/currency_symbol"
         android:textSize="20sp" />
-
 
 
 </LinearLayout>
