@@ -20,7 +20,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,7 +42,6 @@ import java.util.Objects;
 
 public class ConversionActivity extends AppCompatActivity {
 
-    private static final String MY_INTENT = "com.etechbusinesssolutions.android.cryptoapp.cryptservice.CUSTOM_INTENT";
     private static final String CONNECTION_INTENT = "android.net.conn.CONNECTIVITY_CHANGE";
     /**
      * JobScheduler Job ID
@@ -101,18 +99,8 @@ public class ConversionActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-
-            if (intent.getAction().equals(MY_INTENT)) {
-
-
-                MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
-                refreshMenuItem.setVisible(true);
-
-            }
-
             // Set the network menu status
             if (intent.getAction().equals(CONNECTION_INTENT)) {
-
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -140,7 +128,6 @@ public class ConversionActivity extends AppCompatActivity {
 
         // Register the intent here
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MY_INTENT);
         intentFilter.addAction(CONNECTION_INTENT);
         registerReceiver(this.broadcastReceiver, intentFilter);
 
@@ -149,7 +136,7 @@ public class ConversionActivity extends AppCompatActivity {
         mJobScheduler.schedule(new JobInfo.Builder(JOB_ID,
                 new ComponentName(this, JobSchedulerService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPeriodic(60000)
+                .setPeriodic(30000)
                 .build());
 
         value1 = (EditText) findViewById(R.id.value_to_convert_box);
@@ -376,6 +363,7 @@ public class ConversionActivity extends AppCompatActivity {
 
     public boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         return networkInfo != null && networkInfo.isConnected();
@@ -404,7 +392,6 @@ public class ConversionActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(broadcastReceiver, new IntentFilter(MY_INTENT));
         registerReceiver(broadcastReceiver, new IntentFilter(CONNECTION_INTENT));
 
     }
