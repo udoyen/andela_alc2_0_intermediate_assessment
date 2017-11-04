@@ -119,6 +119,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderCallbacks<L
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.splashScreenTheme);
         super.onCreate(savedInstanceState);
 
         // Register the intent here
