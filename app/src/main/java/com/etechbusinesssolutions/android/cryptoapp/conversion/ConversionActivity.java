@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -18,7 +19,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.etechbusinesssolutions.android.cryptoapp.R;
 import com.etechbusinesssolutions.android.cryptoapp.cryptservice.JobSchedulerService;
+import com.etechbusinesssolutions.android.cryptoapp.data.CryptoContract;
 import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 import com.etechbusinesssolutions.android.cryptoapp.networkutil.NetworkUtil;
 
@@ -73,10 +74,7 @@ public class ConversionActivity extends AppCompatActivity {
      * Create an instance of the JobScheduler class
      */
     JobScheduler mJobScheduler;
-    /**
-     * Used to set the menu items
-     */
-    Menu menu = null;
+
     /**
      * Used to check network status
      */
@@ -321,12 +319,36 @@ public class ConversionActivity extends AppCompatActivity {
                 // Format to use for calculated conversion
                 DecimalFormat df = new DecimalFormat("#,###.###");
 
-                // Get the value of the currency from tha database
-                double value = Double.parseDouble(mDBHelper.getCurrencyValue(code, radioBtnState));
+                String currencyToConvert;
+                double returnValue = 0;
 
+                if (Objects.equals(radioBtnState, "eth_value")) {
+                    currencyToConvert = CryptoContract.CurrencyEntry.COLUMN_ETH_VALUE;
+                } else {
+                    currencyToConvert = CryptoContract.CurrencyEntry.COLUMN_BTC_VALUE;
+                }
+
+                String[] projection = {
+                        CryptoContract.CurrencyEntry._ID,
+                        currencyToConvert
+                };
+
+                Cursor cursor = getApplicationContext().getContentResolver().query(
+                  CryptoContract.CurrencyEntry.CONTENT_URI,
+                        projection,
+                        "cur_name = ?",
+                        new String[]{code},
+                        null,
+                        null);
+
+                assert cursor != null;
+                int currencyValueIndex = cursor.getColumnIndex(currencyToConvert);
+                if (cursor.moveToFirst()) {
+                    returnValue = cursor.getDouble(currencyValueIndex);
+                }
 
                 // Calculate the conversion rate
-                cal = userInput / value;
+                cal = userInput / returnValue;
 
                 // Used to format the calculation output
                 result = df.format(cal);
@@ -334,15 +356,21 @@ public class ConversionActivity extends AppCompatActivity {
                 //Set the Conversion Result TextView
                 resultTextView.setText(result);
 
+                // Close database connection
+                cursor.close();
+
 
             } catch (NumberFormatException e) {
 
-                //info: for debudding
-                Log.i("Error", "Calculation error: " + e);
+                Toast.makeText(ConversionActivity.this,
+                        "Please make sure number entered is a real number",
+                        Toast.LENGTH_LONG).show();
+
             } catch (IllegalFormatException g) {
 
-                //info: Remove
-                Log.i("Error", "Error: " + g);
+                Toast.makeText(ConversionActivity.this,
+                        "Please make sure number entered is a real number",
+                        Toast.LENGTH_LONG).show();
             }
 
 
