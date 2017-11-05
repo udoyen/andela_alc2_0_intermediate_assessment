@@ -139,6 +139,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/linear_box_borders"
                     android:onClick="onConvertBtnClick"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/convert_btn_text"
                     android:textAlignment="center" />
 
