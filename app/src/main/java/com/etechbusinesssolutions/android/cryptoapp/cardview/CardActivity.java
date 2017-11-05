@@ -35,6 +35,7 @@ import com.etechbusinesssolutions.android.cryptoapp.data.CurrencyHelper;
 import com.etechbusinesssolutions.android.cryptoapp.networkutil.NetworkUtil;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -189,7 +190,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                 String code = parent.getItemAtPosition(position).toString();
 
 
-                mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
 
                 // Check the state of the spinner
                 if (!spinnerClicked) {
@@ -393,6 +393,7 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
 
                 Intent customConversionRate = new Intent(getApplicationContext(), ConversionActivity.class);
+                customConversionRate.putExtra("CURRENCY_NAME", spinner.getSelectedItemPosition());
                 startActivity(customConversionRate);
 
             }
@@ -405,11 +406,29 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     private void loadSpinnerData() {
 
+        List<String> codes = new ArrayList<>();
 
-        mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
+        String[] projection = {
+                CryptoContract.CurrencyEntry._ID,
+                CryptoContract.CurrencyEntry.COLUMN_CURRENCY_NAME
+        };
 
-        // Spinner dropdown elements
-        List<String> codes = mDBHelper.getAllCurrencyCodeNames();
+        // Get the currency names from the database
+        Cursor cursor = getApplicationContext().getContentResolver().query(
+                CryptoContract.CurrencyEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        //Add currency names to List
+        assert cursor != null;
+        if (cursor.moveToFirst()) {
+            do {
+                codes.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
 
 
         // Create adapter for spinner

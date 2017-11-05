@@ -19,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +34,6 @@ import android.widget.Toast;
 import com.etechbusinesssolutions.android.cryptoapp.R;
 import com.etechbusinesssolutions.android.cryptoapp.cryptservice.JobSchedulerService;
 import com.etechbusinesssolutions.android.cryptoapp.data.CryptoContract;
-import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 import com.etechbusinesssolutions.android.cryptoapp.networkutil.NetworkUtil;
 
 import java.text.DecimalFormat;
@@ -84,6 +84,19 @@ public class ConversionActivity extends AppCompatActivity {
      * Used to check network status
      */
     boolean online;
+
+    /**
+     * Used to set the currently selected
+     * currency spinner value
+     */
+    int currencyName;
+
+    /**
+     * Used to check if the spinner is
+     * drawn for the first time
+     */
+    private boolean curSpinnerClicked = false;
+
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -116,8 +129,7 @@ public class ConversionActivity extends AppCompatActivity {
      * Currency to convert
      */
     private String code;
-    //Create an instance of CryptoCurrencyDBHelper
-    private CryptoCurrencyDBHelper mDBHelper;
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -139,6 +151,13 @@ public class ConversionActivity extends AppCompatActivity {
                 .build());
 
         value1 = (EditText) findViewById(R.id.value_to_convert_box);
+
+        //Catch the data sent from the
+        // CardView
+        Bundle extras = getIntent().getExtras();
+        assert extras != null;
+        currencyName = extras.getInt("CURRENCY_NAME");
+        Log.i("VALUE", "Value of spinner from cardview: " + currencyName);
 
         value1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -170,6 +189,10 @@ public class ConversionActivity extends AppCompatActivity {
         // Instantiate the spinner
         spinner = (Spinner) findViewById(R.id.conversion_spinner);
 
+        // Load the spinner data from database
+        loadSpinnerData();
+
+
         // Spinner listener
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -177,6 +200,11 @@ public class ConversionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Get the item that was selected or clicked
                 code = parent.getItemAtPosition(position).toString();
+
+                if (!curSpinnerClicked) {
+                    spinner.setSelection(currencyName);
+                    spinnerChecker();
+                }
 
                 if (editBoxWithText) {
 
@@ -194,18 +222,12 @@ public class ConversionActivity extends AppCompatActivity {
 
         });
 
-        // Load the spinner data from database
-        loadSpinnerData();
+
 
     }
 
 
     private void loadSpinnerData() {
-
-        mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
-
-        // Spinner dropdown elements
-        //List<String> codes = mDBHelper.getAllCurrencyCodeNames();
 
         List<String> codes = new ArrayList<>();
 
@@ -214,6 +236,7 @@ public class ConversionActivity extends AppCompatActivity {
                 CryptoContract.CurrencyEntry.COLUMN_CURRENCY_NAME
         };
 
+        // Get the currency names from the database
         Cursor cursor = getApplicationContext().getContentResolver().query(
                 CryptoContract.CurrencyEntry.CONTENT_URI,
                 projection,
@@ -453,5 +476,19 @@ public class ConversionActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(broadcastReceiver);
 
+    }
+
+    /**
+     * Checks the original state
+     * of the currency spinner setOnItemSelectedListener
+     * event.
+     */
+    public void spinnerChecker() {
+
+        if (!curSpinnerClicked) {
+
+            curSpinnerClicked = true;
+
+        }
     }
 }
