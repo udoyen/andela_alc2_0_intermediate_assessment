@@ -37,6 +37,7 @@ import com.etechbusinesssolutions.android.cryptoapp.data.CryptoCurrencyDBHelper;
 import com.etechbusinesssolutions.android.cryptoapp.networkutil.NetworkUtil;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Objects;
@@ -204,8 +205,30 @@ public class ConversionActivity extends AppCompatActivity {
         mDBHelper = new CryptoCurrencyDBHelper(getApplicationContext());
 
         // Spinner dropdown elements
-        List<String> codes = mDBHelper.getAllCurrencyCodeNames();
+        //List<String> codes = mDBHelper.getAllCurrencyCodeNames();
 
+        List<String> codes = new ArrayList<>();
+
+        String[] projection = {
+                CryptoContract.CurrencyEntry._ID,
+                CryptoContract.CurrencyEntry.COLUMN_CURRENCY_NAME
+        };
+
+        Cursor cursor = getApplicationContext().getContentResolver().query(
+                CryptoContract.CurrencyEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        //Add currency names to List
+        assert cursor != null;
+        if (cursor.moveToFirst()) {
+            do {
+                codes.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
 
         // Create adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -216,6 +239,7 @@ public class ConversionActivity extends AppCompatActivity {
 
         // Attach dataAdapter to spinner
         spinner.setAdapter(dataAdapter);
+        cursor.close();
 
     }
 
