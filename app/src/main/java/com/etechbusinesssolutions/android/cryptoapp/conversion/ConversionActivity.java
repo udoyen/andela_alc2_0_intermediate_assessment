@@ -84,19 +84,6 @@ public class ConversionActivity extends AppCompatActivity {
      * Used to check network status
      */
     boolean online;
-
-    /**
-     * Used to set the currently selected
-     * currency spinner value
-     */
-    int currencyName;
-
-    /**
-     * Used to check if the spinner is
-     * drawn for the first time
-     */
-    private boolean curSpinnerClicked = false;
-
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -112,7 +99,7 @@ public class ConversionActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             // Set the network menu status
-            if (intent.getAction().equals(CONNECTION_INTENT)) {
+            if (Objects.equals(intent.getAction(), CONNECTION_INTENT)) {
 
                 status = NetworkUtil.getConnectivityStatusString(context);
                 online = (Objects.equals(status, "Wifi enabled") || Objects.equals(status, "Mobile data enabled"));
@@ -121,6 +108,16 @@ public class ConversionActivity extends AppCompatActivity {
             }
         }
     };
+    /**
+     * Used to set the currently selected
+     * currency spinner value
+     */
+    int currencyName;
+    /**
+     * Used to check if the spinner is
+     * drawn for the first time
+     */
+    private boolean curSpinnerClicked = false;
     /**
      * Radio button state
      */
@@ -221,7 +218,6 @@ public class ConversionActivity extends AppCompatActivity {
 
 
         });
-
 
 
     }
@@ -381,7 +377,7 @@ public class ConversionActivity extends AppCompatActivity {
                 };
 
                 Cursor cursor = getApplicationContext().getContentResolver().query(
-                  CryptoContract.CurrencyEntry.CONTENT_URI,
+                        CryptoContract.CurrencyEntry.CONTENT_URI,
                         projection,
                         "cur_name = ?",
                         new String[]{code},
