@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -182,6 +183,18 @@ public class ConversionActivity extends AppCompatActivity {
         });
 
 
+         //Closes popup keyboard
+         //when editext loses focus
+        value1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+
         // Setup the spinner data
         // Instantiate the spinner
         spinner = (Spinner) findViewById(R.id.conversion_spinner);
@@ -207,6 +220,8 @@ public class ConversionActivity extends AppCompatActivity {
 
                     conversion();
                 }
+
+                hideKeyboard(view);
 
 
             }
@@ -428,6 +443,7 @@ public class ConversionActivity extends AppCompatActivity {
         conversionBtn = true;
 
         conversion();
+        hideKeyboard(view);
 
 
     }
@@ -460,6 +476,7 @@ public class ConversionActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -474,6 +491,7 @@ public class ConversionActivity extends AppCompatActivity {
 
     }
 
+
     /**
      * Checks the original state
      * of the currency spinner setOnItemSelectedListener
@@ -486,5 +504,16 @@ public class ConversionActivity extends AppCompatActivity {
             curSpinnerClicked = true;
 
         }
+    }
+
+    /**
+     *
+     * @param view to use to control
+     *             keyboard appearance
+     */
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        assert inputMethodManager != null;
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -16,6 +16,8 @@
     <string name="empty_view_subtitle_text">It appears we have no data …!</string>
     <string name="network_absent">no network</string>
     <string name="network_avalable">network</string>
+    <string name="data_refresh">data Refresh</string>
+    <string name="menu_spinner">spinner</string>
     <string-array name="crypto_array">
         <item>ETH</item>
         <item>BTC</item>
