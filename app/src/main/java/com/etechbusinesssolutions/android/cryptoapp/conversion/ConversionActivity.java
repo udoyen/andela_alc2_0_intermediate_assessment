@@ -19,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -110,6 +111,19 @@ public class ConversionActivity extends AppCompatActivity {
         }
     };
     /**
+     * Used to get the value
+     * of the radio button
+     */
+    String radioBtnValue;
+    /**
+     * Used to get the value of
+     * the spinner
+     */
+    int spinnerValue;
+    RadioGroup radioGroup;
+    RadioButton radioBtn;
+    Spinner curSpinner;
+    /**
      * Used to set the currently selected
      * currency spinner value
      */
@@ -155,6 +169,7 @@ public class ConversionActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         assert extras != null;
         currencyName = extras.getInt("CURRENCY_NAME");
+        // TODO: Remove
         Log.i("VALUE", "Value of spinner from cardview: " + currencyName);
 
         value1.addTextChangedListener(new TextWatcher() {
@@ -183,8 +198,8 @@ public class ConversionActivity extends AppCompatActivity {
         });
 
 
-         //Closes popup keyboard
-         //when editext loses focus
+        //Closes popup keyboard
+        //when editext loses focus
         value1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -234,9 +249,69 @@ public class ConversionActivity extends AppCompatActivity {
 
         });
 
+    }
+
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+
+        return super.onCreateView(name, context, attrs);
+    }
+
+    /**
+     * Get the value of selected radio
+     * button.
+     *
+     * @return string
+     */
+    public String getRadioBtnValue() {
+
+
+        radioGroup = (RadioGroup) findViewById(R.id.radio_container);
+        int selectedId;
+
+
+        if (radioGroup.getCheckedRadioButtonId() != -1) {
+
+            // Get the selected radio button from radioGroup
+            selectedId = radioGroup.getCheckedRadioButtonId();
+
+            // Find tha radio button by returned id
+            radioBtn = (RadioButton) findViewById(selectedId);
+
+            // Cast the result into a string
+            radioBtnValue = (String) radioBtn.getText();
+
+            return radioBtnValue;
+        }
+
+        return "nothing selected";
 
     }
 
+    /**
+     * Gets the value of the spinner
+     *
+     * @return int
+     */
+    public int getSpinnerValue() {
+        curSpinner = (Spinner) findViewById(R.id.conversion_spinner);
+        spinnerValue = curSpinner.getSelectedItemPosition();
+
+        return spinnerValue;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //super.onBackPressed();
+
+        Intent intent = new Intent();
+        intent.putExtra("radioBtnValue", getRadioBtnValue());
+        intent.putExtra("spinnerValue", getSpinnerValue());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
     private void loadSpinnerData() {
 
@@ -507,13 +582,14 @@ public class ConversionActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param view to use to control
      *             keyboard appearance
      */
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         assert inputMethodManager != null;
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
 }

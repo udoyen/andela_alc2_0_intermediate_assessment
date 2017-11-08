@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,6 +93,9 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      * Used to check network status
      */
     boolean online;
+
+    String radioValueFromConversionView;
+    int spinnerValueFromConversionView;
 
 
     /**
@@ -394,11 +398,38 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 Intent customConversionRate = new Intent(getApplicationContext(), ConversionActivity.class);
                 customConversionRate.putExtra("CURRENCY_NAME", spinner.getSelectedItemPosition());
-                startActivity(customConversionRate);
+                //startActivity(customConversionRate);
+                startActivityForResult(customConversionRate, 1);
 
             }
         });
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                // Get the radioButton and spinner values from conversion view
+                radioValueFromConversionView = data.getStringExtra("radioBtnValue");
+                spinnerValueFromConversionView = data.getIntExtra("spinnerValue", 1);
+
+                // get the type of crypto currency selected
+                // in radio  button
+                if (Objects.equals(radioValueFromConversionView, "ETH")) {
+                    curSpinner.setSelection(0);
+                }
+
+                if (Objects.equals(radioValueFromConversionView, "BTC")) {
+                    curSpinner.setSelection(1);
+                }
+
+                spinner.setSelection(spinnerValueFromConversionView);
+                Log.i("return", String.valueOf(spinnerValueFromConversionView) + " " + radioValueFromConversionView);
+            }
+        }
     }
 
     /**

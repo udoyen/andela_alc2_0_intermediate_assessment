@@ -194,7 +194,8 @@ public class CrytocurrencyQueryUtils {
             }
 
         } catch (IOException e) {
-            Log.e("Error", "Problem retrieving the earthquake JSON results.", e);
+
+            Log.e("Error", "Problem retrieving the crypyocompare JSON results.", e);
 
         } finally {
             if (urlConnection != null) {
