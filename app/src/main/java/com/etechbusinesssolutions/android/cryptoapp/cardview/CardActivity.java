@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,11 +92,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
      * Used to check network status
      */
     boolean online;
-
-    String radioValueFromConversionView;
-    int spinnerValueFromConversionView;
-
-
     /**
      * Use this to catch the intent sent from the JobSchedulerService class
      */
@@ -122,6 +116,8 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
     };
+    String radioValueFromConversionView;
+    int spinnerValueFromConversionView;
     //Create an instance of CryptoCurrencyDBHelper
     private CryptoCurrencyDBHelper mDBHelper;
     /**
@@ -192,7 +188,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 // Get the item that was selected or clicked
                 String code = parent.getItemAtPosition(position).toString();
-
 
 
                 // Check the state of the spinner
@@ -427,7 +422,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 spinner.setSelection(spinnerValueFromConversionView);
-                Log.i("return", String.valueOf(spinnerValueFromConversionView) + " " + radioValueFromConversionView);
             }
         }
     }

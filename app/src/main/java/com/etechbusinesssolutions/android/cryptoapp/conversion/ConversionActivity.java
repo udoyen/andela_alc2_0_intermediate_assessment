@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -169,8 +168,6 @@ public class ConversionActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         assert extras != null;
         currencyName = extras.getInt("CURRENCY_NAME");
-        // TODO: Remove
-        Log.i("VALUE", "Value of spinner from cardview: " + currencyName);
 
         value1.addTextChangedListener(new TextWatcher() {
             @Override
