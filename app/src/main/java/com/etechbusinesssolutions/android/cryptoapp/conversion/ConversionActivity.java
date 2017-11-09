@@ -119,8 +119,18 @@ public class ConversionActivity extends AppCompatActivity {
      * the spinner
      */
     int spinnerValue;
+    /**
+     * radio button group
+     */
     RadioGroup radioGroup;
+    /**
+     * radio button group
+     * member
+     */
     RadioButton radioBtn;
+    /**
+     * crypto currency spinner
+     */
     Spinner curSpinner;
     /**
      * Used to set the currently selected

@@ -16,7 +16,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +74,6 @@ public class CrytocurrencyQueryUtils {
             19,
             20
     };
-    /**
-     * Format to use for displayed currencies
-     */
-    DecimalFormat df = new DecimalFormat("#,###.###");
-
 
     /**
      * Create a private constructor because no one should ever create a {@link CrytocurrencyQueryUtils} object.
