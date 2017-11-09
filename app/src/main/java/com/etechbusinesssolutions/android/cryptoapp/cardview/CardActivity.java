@@ -393,7 +393,6 @@ public class CardActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 Intent customConversionRate = new Intent(getApplicationContext(), ConversionActivity.class);
                 customConversionRate.putExtra("CURRENCY_NAME", spinner.getSelectedItemPosition());
-                //startActivity(customConversionRate);
                 startActivityForResult(customConversionRate, 1);
 
             }
