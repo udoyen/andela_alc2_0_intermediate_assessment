@@ -171,7 +171,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
         mySwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
         // Set the color of the swiperefresh animation
-        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondary);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondary);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

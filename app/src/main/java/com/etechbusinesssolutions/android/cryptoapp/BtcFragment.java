@@ -158,7 +158,7 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         super.onViewCreated(view, savedInstanceState);
 
         mySwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
-        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondaryLight);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark,R.color.colorPrimary,R.color.colorPrimaryLight, R.color.colorSecondary);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
