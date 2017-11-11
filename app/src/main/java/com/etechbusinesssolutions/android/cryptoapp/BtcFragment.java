@@ -66,12 +66,14 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         // currency_base.xml layout file.
         final ListView listView = rootView.findViewById(R.id.list);
 
+        progressBar = rootView.findViewById(R.id.loading_spinner);
+
         // Get the empty  Text view
         mEmptyStateTextView = rootView.findViewById(R.id.empty);
         //Add a nice empty view to the layout file for this fragment
         listView.setEmptyView(mEmptyStateTextView);
 
-        progressBar = rootView.findViewById(R.id.loading_spinner);
+
 
         // Create an {@link BtcCurrencyAdapter}, whose data source is a list of {@link Currency}.
         // The adapter knows how to create the list items for each item in the list.
@@ -196,8 +198,6 @@ public class BtcFragment extends Fragment implements LoaderCallbacks<Cursor> {
         mAdapter.swapCursor(data);
         // Stop the refreshing animation
         mySwipeRefreshLayout.setRefreshing(false);
-
-        progressBar.setVisibility(View.GONE);
 
     }
 

@@ -78,12 +78,14 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
         // currency_base.xml layout file.
         final ListView listView = rootView.findViewById(R.id.list);
 
+        progressBar = rootView.findViewById(R.id.loading_spinner);
+
         // Get the empty  Text view
         mEmptyStateTextView = rootView.findViewById(R.id.empty);
         //Add a nice empty view to the layout file for this fragment
         listView.setEmptyView(mEmptyStateTextView);
 
-        progressBar = rootView.findViewById(R.id.loading_spinner);
+
 
         // Create an {@link BtcCurrencyAdapter}, whose data source is a list of {@link Currency}.
         // The adapter knows how to create the list items for each item in the list.
@@ -92,7 +94,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
         // Make the {@link ListView} use the {@link WordAdapter} we created above, so that the
         // {@link ListView} will display list items for each {@link Word} in the list.
         listView.setAdapter(mAdapter);
-        // Notify listview of data channges on adapter
+        // Notify listview of data changes on adapter
         mAdapter.notifyDataSetChanged();
 
 
@@ -175,7 +177,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
             public void onRefresh() {
 
                 userPageRefreshAction();
-                //onCreateLoader(1, getArguments());
+
             }
         });
     }
@@ -208,8 +210,6 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
         // Stop the refreshing animation
         mySwipeRefreshLayout.setRefreshing(false);
 
-        progressBar.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -233,6 +233,7 @@ public class EthFragment extends Fragment implements LoaderManager.LoaderCallbac
 
 
     }
+
 
 
 }
